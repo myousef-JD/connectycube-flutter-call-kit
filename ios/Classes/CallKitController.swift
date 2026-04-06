@@ -71,20 +71,20 @@ class CallKitController : NSObject {
         return providerConfiguration
     }()
     
-    static func updateConfig(
+    func updateConfig(
         ringtone: String?,
         icon: String?
         
     ) {
         if(ringtone != nil){
-            providerConfiguration.ringtoneSound = ringtone
+            provider.configuration.ringtoneSound = ringtone
         }
-        
+
         if(icon != nil){
             let iconImage = UIImage(named: icon!)
             let iconData = iconImage?.pngData()
-            
-            providerConfiguration.iconTemplateImageData = iconData
+
+            provider.configuration.iconTemplateImageData = iconData
         }
     }
     
