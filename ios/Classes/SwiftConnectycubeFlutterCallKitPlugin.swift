@@ -194,10 +194,15 @@ public class SwiftConnectycubeFlutterCallKitPlugin: NSObject, FlutterPlugin {
                 return
             }
             let callId = arguments["session_id"] as! String
-            let callVideoEnabled = arguments["video_enabled"] as! Bool
-            let callReceiverName = arguments["receiver_name"] as! String
+            let callType = arguments["call_type"] as! Int
+            let callInitiatorId = arguments["caller_id"] as! Int
+            let callReceiverName = arguments["caller_name"] as! String
+            let callOpponentsString = arguments["call_opponents"] as! String
+            let callOpponents = callOpponentsString.components(separatedBy: ",").map { Int($0) ?? 0 }
+            let userInfo = arguments["user_info"] as? String
             
-            SwiftConnectycubeFlutterCallKitPlugin.callController.startCall(handle: callReceiverName, videoEnabled: callVideoEnabled, uuid: callId.lowercased())
+            SwiftConnectycubeFlutterCallKitPlugin.callController.startCall(handle: callReceiverName, videoEnabled: callType == 1, uuid: callId.lowercased(), callInitiatorId: callInitiatorId, opponents: callOpponents, userInfo: userInfo)
+            result(true)
         }
         else {
             result(FlutterMethodNotImplemented)

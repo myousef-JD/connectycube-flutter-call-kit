@@ -320,18 +320,10 @@ class ConnectycubeFlutterCallKit {
   }
 
   /// Start a call in iOS CallKit
-  static Future<void> startCall({
-    required String sessionId,
-    required bool videoEnabled,
-    required String receiverName,
-  }) async {
+  static Future<void> startCall(CallEvent callEvent) async {
     if (!Platform.isIOS) return Future.value();
 
-    return _methodChannel.invokeMethod("startCall", {
-      'session_id': sessionId,
-      'video_enabled': videoEnabled,
-      'receiver_name': receiverName,
-    });
+    return _methodChannel.invokeMethod("startCall", callEvent.toMap());
   }
 
   static void _processEvent(Map<String, dynamic> eventData) {

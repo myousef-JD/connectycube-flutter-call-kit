@@ -262,7 +262,14 @@ extension CallKitController {
         requestTransaction(transaction)
     }
     
-    func startCall(handle: String, videoEnabled: Bool, uuid: String? = nil) {
+    func startCall(
+        handle: String,
+        videoEnabled: Bool,
+        uuid: String? = nil,
+        callInitiatorId: Int,
+        opponents: [Int],
+        userInfo: String?
+    ) {
         print("[CallKitController][startCall] handle:\(handle), videoEnabled: \(videoEnabled) uuid: \(uuid ?? "nil")")
         
         let handle = CXHandle(type: .generic, value: handle)
@@ -271,16 +278,18 @@ extension CallKitController {
         startCallAction.isVideo = videoEnabled
         
         let transaction = CXTransaction(action: startCallAction)
+
+        self.currentCallData["session_id"] = callUUID.uuidString.lowercased()
+        self.currentCallData["call_type"] = videoEnabled ? 1 : 0
+        self.currentCallData["caller_id"] = callInitiatorId
+        self.currentCallData["caller_name"] = handle
+        self.currentCallData["call_opponents"] = opponents.map { String($0) }.joined(separator: ",")
+        self.currentCallData["user_info"] = userInfo
         
         self.callStates[uuid!.lowercased()] = .accepted
+        self.callsData[uuid] = self.currentCallData
         
         requestTransaction(transaction);
-
-        self.currentCallData["session_id"] = uuid
-        self.currentCallData["call_type"] = videoEnabled ? 1 : 0
-        self.currentCallData["caller_id"] = 1  // Not needed but set to prevent crash
-        self.currentCallData["caller_name"] = ""    // Not needed but set to prevent crash
-        self.currentCallData["call_opponents"] = "2"  // Not needed but set to prevent crash
     }
     
     func answerCall(uuid: String) {
