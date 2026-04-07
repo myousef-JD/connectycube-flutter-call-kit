@@ -182,22 +182,22 @@ public class SwiftConnectycubeFlutterCallKitPlugin: NSObject, FlutterPlugin {
         else if call.method == "getLastCallId" {
             result(SwiftConnectycubeFlutterCallKitPlugin.callController.currentCallData["session_id"])
         }
-        else if call.method == "muteCall" {
-            guard let arguments = arguments else {
-                result(FlutterError(code: "invalid_argument", message: "No data was provided.", details: nil))
-                return
-            }
-            let callId = arguments["session_id"] as! String
-            let muted = arguments["muted"] as! Bool
-            
-            SwiftConnectycubeFlutterCallKitPlugin.callController.setMute(uuid: UUID(uuidString: callId)!, muted: muted)
-            result(true)
-        }
         else if call.method == "canUseFullScreenIntent" {
             result(true)
         }
         else if call.method == "provideFullScreenIntentAccess" {
             result(true)
+        }
+        else if call.method == "startCall" {
+            guard let arguments = arguments else {
+                result(FlutterError(code: "invalid_argument", message: "No data was provided.", details: nil))
+                return
+            }
+            let callId = arguments["session_id"] as! String
+            let callVideoEnabled = arguments["video_enabled"] as! Bool
+            let callReceiverName = arguments["receiver_name"] as! String
+            
+            SwiftConnectycubeFlutterCallKitPlugin.callController.startCall(handle: callReceiverName, videoEnabled: callVideoEnabled, uuid: callId.lowercased())
         }
         else {
             result(FlutterMethodNotImplemented)

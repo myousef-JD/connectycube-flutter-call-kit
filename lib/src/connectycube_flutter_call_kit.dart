@@ -319,6 +319,21 @@ class ConnectycubeFlutterCallKit {
     return _methodChannel.invokeMethod("provideFullScreenIntentAccess");
   }
 
+  /// Start a call in iOS CallKit
+  static Future<void> startCall({
+    required String sessionId,
+    required bool videoEnabled,
+    required String receiverName,
+  }) async {
+    if (!Platform.isIOS) return Future.value();
+
+    return _methodChannel.invokeMethod("startCall", {
+      'session_id': sessionId,
+      'video_enabled': videoEnabled,
+      'receiver_name': receiverName,
+    });
+  }
+
   static void _processEvent(Map<String, dynamic> eventData) {
     log('[ConnectycubeFlutterCallKit][_processEvent] eventData: $eventData');
 
