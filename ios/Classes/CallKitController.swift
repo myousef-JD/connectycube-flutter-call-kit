@@ -265,7 +265,7 @@ extension CallKitController {
     func startCall(
         handle: String,
         videoEnabled: Bool,
-        uuid: String? = nil,
+        uuid: String,
         callInitiatorId: Int,
         opponents: [Int],
         userInfo: String?
@@ -273,21 +273,21 @@ extension CallKitController {
         print("[CallKitController][startCall] handle:\(handle), videoEnabled: \(videoEnabled) uuid: \(uuid ?? "nil")")
         
         let handle = CXHandle(type: .generic, value: handle)
-        let callUUID = uuid == nil ? UUID() : UUID(uuidString: uuid!)
+        let callUUID = UUID(uuidString: uuid)
         let startCallAction = CXStartCallAction(call: callUUID!, handle: handle)
         startCallAction.isVideo = videoEnabled
         
         let transaction = CXTransaction(action: startCallAction)
 
-        self.currentCallData["session_id"] = callUUID.uuidString.lowercased()
+        self.currentCallData["session_id"] = uuid
         self.currentCallData["call_type"] = videoEnabled ? 1 : 0
         self.currentCallData["caller_id"] = callInitiatorId
         self.currentCallData["caller_name"] = handle
         self.currentCallData["call_opponents"] = opponents.map { String($0) }.joined(separator: ",")
         self.currentCallData["user_info"] = userInfo
         
-        self.callStates[uuid!.lowercased()] = .accepted
-        self.callsData[uuid] = self.currentCallData
+        self.callStates[uuid.lowercased()] = .accepted
+        self.callsData[uuid.lowercased()] = self.currentCallData
         
         requestTransaction(transaction);
     }
