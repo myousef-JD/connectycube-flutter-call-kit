@@ -278,7 +278,9 @@ extension CallKitController {
 
         self.currentCallData["session_id"] = uuid
         self.currentCallData["call_type"] = videoEnabled ? 1 : 0
-        self.currentCallData["call_opponents"] = handle
+        self.currentCallData["caller_id"] = 1  // Not needed but set to prevent crash
+        self.currentCallData["caller_name"] = ""    // Not needed but set to prevent crash
+        self.currentCallData["call_opponents"] = 2  // Not needed but set to prevent crash
     }
     
     func answerCall(uuid: String) {
