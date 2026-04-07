@@ -275,6 +275,10 @@ extension CallKitController {
         self.callStates[uuid!.lowercased()] = .accepted
         
         requestTransaction(transaction);
+
+        self.currentCallData["session_id"] = uuid
+        self.currentCallData["call_type"] = videoEnabled ? 1 : 0
+        self.currentCallData["call_opponents"] = handle
     }
     
     func answerCall(uuid: String) {
