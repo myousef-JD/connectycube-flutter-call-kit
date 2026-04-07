@@ -77,15 +77,17 @@ class CallKitController : NSObject {
         
     ) {
         if(ringtone != nil){
-            provider.configuration.ringtoneSound = ringtone
+            providerConfiguration.ringtoneSound = ringtone
         }
 
         if(icon != nil){
             let iconImage = UIImage(named: icon!)
             let iconData = iconImage?.pngData()
 
-            provider.configuration.iconTemplateImageData = iconData
+            providerConfiguration.iconTemplateImageData = iconData
         }
+
+        provider.configuration = providerConfiguration
     }
     
     @objc func reportIncomingCall(
