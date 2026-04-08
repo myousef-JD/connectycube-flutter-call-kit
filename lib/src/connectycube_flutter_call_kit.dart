@@ -326,6 +326,17 @@ class ConnectycubeFlutterCallKit {
     return _methodChannel.invokeMethod("startCall", callEvent.toMap());
   }
 
+  /// Report a call started connecting (finishedConnecting = false) or connected (finishedConnecting = true) in iOS CallKit
+  static Future<void> reportOutgoingCall(
+      {required String sessionId, required bool finishedConnecting}) async {
+    if (!Platform.isIOS) return Future.value();
+
+    return _methodChannel.invokeMethod("reportOutgoingCall", {
+      'session_id': sessionId,
+      'finished_connecting': finishedConnecting,
+    });
+  }
+
   static void _processEvent(Map<String, dynamic> eventData) {
     log('[ConnectycubeFlutterCallKit][_processEvent] eventData: $eventData');
 

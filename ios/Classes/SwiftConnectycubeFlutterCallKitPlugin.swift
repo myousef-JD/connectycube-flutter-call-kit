@@ -204,6 +204,17 @@ public class SwiftConnectycubeFlutterCallKitPlugin: NSObject, FlutterPlugin {
             SwiftConnectycubeFlutterCallKitPlugin.callController.startCall(handle: callReceiverName, videoEnabled: callType == 1, uuid: callId.lowercased(), callInitiatorId: callInitiatorId, opponents: callOpponents, userInfo: userInfo)
             result(true)
         }
+        else if call.method == "reportOutgoingCall" {
+            guard let arguments = arguments else {
+                result(FlutterError(code: "invalid_argument", message: "No data was provided.", details: nil))
+                return
+            }
+            let callId = arguments["session_id"] as! String
+            let callFinishedConnecting = arguments["finished_connecting"] as! Bool
+
+            SwiftConnectycubeFlutterCallKitPlugin.callController.reportOutgoingCall(uuid: UUID(uuidString: callId)!, finishedConnecting: callFinishedConnecting)
+            result(true)
+        }
         else {
             result(FlutterMethodNotImplemented)
         }
