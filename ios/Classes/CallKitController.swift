@@ -270,11 +270,11 @@ extension CallKitController {
         opponents: [Int],
         userInfo: String?
     ) {
-        print("[CallKitController][startCall] handle:\(handle), videoEnabled: \(videoEnabled) uuid: \(uuid ?? "nil")")
+        print("[CallKitController][startCall] handle:\(handle), videoEnabled: \(videoEnabled) uuid: \(uuid)")
         
-        let handle = CXHandle(type: .generic, value: handle)
+        let cxHandle = CXHandle(type: .generic, value: handle)
         let callUUID = UUID(uuidString: uuid)
-        let startCallAction = CXStartCallAction(call: callUUID!, handle: handle)
+        let startCallAction = CXStartCallAction(call: callUUID!, handle: cxHandle)
         startCallAction.isVideo = videoEnabled
         
         let transaction = CXTransaction(action: startCallAction)
