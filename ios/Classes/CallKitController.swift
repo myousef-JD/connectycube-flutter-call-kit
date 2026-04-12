@@ -264,17 +264,32 @@ extension CallKitController {
         requestTransaction(transaction)
     }
     
-    func startCall(handle: String, videoEnabled: Bool, uuid: String? = nil) {
-        print("[CallKitController][startCall] handle:\(handle), videoEnabled: \(videoEnabled) uuid: \(uuid ?? "nil")")
+    func startCall(
+        handle: String,
+        videoEnabled: Bool,
+        uuid: String,
+        callInitiatorId: Int,
+        opponents: [Int],
+        userInfo: String?
+    ) {
+        print("[CallKitController][startCall] handle:\(handle), videoEnabled: \(videoEnabled) uuid: \(uuid)")
         
-        let handle = CXHandle(type: .generic, value: handle)
-        let callUUID = uuid == nil ? UUID() : UUID(uuidString: uuid!)
-        let startCallAction = CXStartCallAction(call: callUUID!, handle: handle)
+        let cxHandle = CXHandle(type: .generic, value: handle)
+        let callUUID = UUID(uuidString: uuid)
+        let startCallAction = CXStartCallAction(call: callUUID!, handle: cxHandle)
         startCallAction.isVideo = videoEnabled
         
         let transaction = CXTransaction(action: startCallAction)
+
+        self.currentCallData["session_id"] = uuid
+        self.currentCallData["call_type"] = videoEnabled ? 1 : 0
+        self.currentCallData["caller_id"] = callInitiatorId
+        self.currentCallData["caller_name"] = handle
+        self.currentCallData["call_opponents"] = opponents.map { String($0) }.joined(separator: ",")
+        self.currentCallData["user_info"] = userInfo
         
-        self.callStates[uuid!.lowercased()] = .accepted
+        self.callStates[uuid.lowercased()] = .accepted
+        self.callsData[uuid.lowercased()] = self.currentCallData
         
         requestTransaction(transaction);
     }
