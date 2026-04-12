@@ -42,7 +42,7 @@ class CallKitController : NSObject {
     private var callsData: [String:[String:Any]] = [:]
     
     override init() {
-        self.provider = CXProvider(configuration: CallKitController.providerConfiguration)
+        self.provider = CXProvider(configuration: providerConfiguration)
         self.callController = CXCallController()
         
         super.init()
@@ -50,7 +50,7 @@ class CallKitController : NSObject {
     }
     
     //TODO: construct configuration from flutter. pass into init over method channel
-    static var providerConfiguration: CXProviderConfiguration = {
+    var providerConfiguration: CXProviderConfiguration = {
         let appName = Bundle.main.infoDictionary?[kCFBundleNameKey as String] as! String
         var providerConfiguration: CXProviderConfiguration
         if #available(iOS 14.0, *) {
@@ -71,7 +71,7 @@ class CallKitController : NSObject {
         return providerConfiguration
     }()
     
-    static func updateConfig(
+    func updateConfig(
         ringtone: String?,
         icon: String?
         
@@ -79,13 +79,15 @@ class CallKitController : NSObject {
         if(ringtone != nil){
             providerConfiguration.ringtoneSound = ringtone
         }
-        
+
         if(icon != nil){
             let iconImage = UIImage(named: icon!)
             let iconData = iconImage?.pngData()
-            
+
             providerConfiguration.iconTemplateImageData = iconData
         }
+
+        provider.configuration = providerConfiguration
     }
     
     @objc func reportIncomingCall(
