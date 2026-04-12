@@ -73,8 +73,8 @@ class CallKitController : NSObject {
     
     func updateConfig(
         ringtone: String?,
-        icon: String?
-        
+        icon: String?,
+        includesCallsInRecents: Bool?
     ) {
         if(ringtone != nil){
             providerConfiguration.ringtoneSound = ringtone
@@ -85,6 +85,12 @@ class CallKitController : NSObject {
             let iconData = iconImage?.pngData()
 
             providerConfiguration.iconTemplateImageData = iconData
+        }
+
+        if let includesCallsInRecents {
+            if #available(iOS 11.0, *) {
+                providerConfiguration.includesCallsInRecents = includesCallsInRecents
+            }
         }
 
         provider.configuration = providerConfiguration
