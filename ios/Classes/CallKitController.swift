@@ -87,7 +87,7 @@ class CallKitController : NSObject {
             providerConfiguration.iconTemplateImageData = iconData
         }
 
-        if(includesCallsInRecents != nil){
+        if let includesCallsInRecents {
             if #available(iOS 11.0, *) {
                 providerConfiguration.includesCallsInRecents = includesCallsInRecents
             }
