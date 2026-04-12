@@ -78,7 +78,8 @@ public class SwiftConnectycubeFlutterCallKitPlugin: NSObject, FlutterPlugin {
             }
             let ringtone = arguments["ringtone"] as? String
             let icon = arguments["icon"] as? String
-            SwiftConnectycubeFlutterCallKitPlugin.callController.updateConfig(ringtone: ringtone, icon: icon)
+            let includesCallsInRecents = arguments["includesCallsInRecents"] as? Bool
+            SwiftConnectycubeFlutterCallKitPlugin.callController.updateConfig(ringtone: ringtone, icon: icon, includesCallsInRecents: includesCallsInRecents)
             
             result(true)
         }
